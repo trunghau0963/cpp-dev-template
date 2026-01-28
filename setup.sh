@@ -207,11 +207,11 @@ create_directory_structure() {
     mkdir -p tests
     mkdir -p docs
     mkdir -p third_party
+    mkdir -p .vscode
     
     # Create .gitkeep files to preserve empty directories
     touch lib/.gitkeep
     touch third_party/.gitkeep
-    touch docs/.gitkeep
     touch tests/.gitkeep
     
     print_success "Directory structure created"
@@ -224,6 +224,7 @@ create_directory_structure() {
     echo "  ├── tests/                # Test files"
     echo "  ├── docs/                 # Documentation"
     echo "  ├── third_party/          # Third-party dependencies"
+    echo "  ├── .vscode/              # VS Code configuration"
     echo "  └── build/"
     echo "      ├── preprocessed/     # Step 1: .i files"
     echo "      ├── assembly/         # Step 2: .s files"
@@ -231,6 +232,86 @@ create_directory_structure() {
     echo "      ├── bin/              # Step 4: executables"
     echo "      ├── deps/             # Dependency files (.d)"
     echo "      └── cmake/            # CMake build files"
+}
+
+create_sample_files() {
+    print_header "Creating Sample Files"
+    
+    # Sample main.cpp nếu chưa có
+    if [ ! -f "src/main.cpp" ]; then
+        cat > src/main.cpp << 'EOF'
+#include <iostream>
+#include "config.hpp"
+
+int main() {
+    config::printBuildInfo();
+    std::cout << "Hello, C++ World!" << std::endl;
+    return 0;
+}
+EOF
+        print_success "Created src/main.cpp"
+    fi
+    
+    # Sample config.hpp nếu chưa có
+    if [ ! -f "include/config.hpp" ]; then
+        cat > include/config.hpp << 'EOF'
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
+#include <iostream>
+
+namespace config {
+constexpr const char* PROJECT_NAME = "cpp_project";
+constexpr const char* VERSION = "1.0.0";
+
+#ifdef DEBUG
+    constexpr bool IS_DEBUG = true;
+    constexpr const char* BUILD_TYPE = "Debug";
+#else
+    constexpr bool IS_DEBUG = false;
+    constexpr const char* BUILD_TYPE = "Release";
+#endif
+
+inline void printBuildInfo() {
+    std::cout << "Project: " << PROJECT_NAME << " v" << VERSION << "\n";
+    std::cout << "Build: " << BUILD_TYPE << "\n";
+}
+}  // namespace config
+#endif
+EOF
+        print_success "Created include/config.hpp"
+    fi
+    
+    # README.md nếu chưa có
+    if [ ! -f "README.md" ]; then
+        cat > README.md << 'EOF'
+# C++ Project Template
+
+Professional C++ development environment for VS Code.
+
+## Quick Start
+
+```bash
+# Build
+make
+
+# Run
+make run
+
+# Debug in VS Code
+Press F5
+```
+
+## Documentation
+
+- [Usage Guide](docs/USAGE_GUIDE.md)
+- [Cheatsheet](docs/CHEATSHEET.md)
+EOF
+        print_success "Created README.md"
+    fi
+    
+    echo ""
+    echo "  ✅ Sample files created"
+    echo "  📝 Edit src/main.cpp to start coding"
 }
 
 verify_installation() {
@@ -365,6 +446,7 @@ main() {
     install_analysis_tools
     install_documentation_tools
     create_directory_structure
+    create_sample_files
     verify_installation
     print_usage_guide
     
