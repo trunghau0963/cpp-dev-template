@@ -1,0 +1,44 @@
+{
+    "recommendations": [
+        // ═══════════════════════════════════════════════════════════════════
+        // REQUIRED - C/C++ Development
+        // ═══════════════════════════════════════════════════════════════════
+        "ms-vscode.cpptools",           // C/C++ IntelliSense, debugging
+        "ms-vscode.cpptools-extension-pack",  // Complete C++ extension pack
+        "ms-vscode.cmake-tools",        // CMake support
+        
+        // ═══════════════════════════════════════════════════════════════════
+        // RECOMMENDED - Code Quality
+        // ═══════════════════════════════════════════════════════════════════
+        "xaver.clang-format",           // Code formatting
+        "llvm-vs-code-extensions.vscode-clangd",  // Alternative to cpptools, better performance
+        "jeff-hykin.better-cpp-syntax", // Better syntax highlighting
+        "cschlosser.doxdocgen",         // Documentation generator
+        
+        // ═══════════════════════════════════════════════════════════════════
+        // DEBUGGING & PROFILING
+        // ═══════════════════════════════════════════════════════════════════
+        "vadimcn.vscode-lldb",          // LLDB debugger (alternative to GDB)
+        "webfreak.debug",               // Native Debug (GDB/LLDB)
+        
+        // ═══════════════════════════════════════════════════════════════════
+        // PRODUCTIVITY
+        // ═══════════════════════════════════════════════════════════════════
+        "formulahendry.code-runner",    // Quick code execution
+        "github.copilot",               // AI code assistant
+        "visualstudioexptteam.vscodeintellicode",  // AI-assisted IntelliSense
+        "streetsidesoftware.code-spell-checker",   // Spell checking
+        
+        // ═══════════════════════════════════════════════════════════════════
+        // GIT & COLLABORATION
+        // ═══════════════════════════════════════════════════════════════════
+        "eamodio.gitlens",              // Git supercharged
+        "mhutchie.git-graph",           // Git graph visualization
+        
+        // ═══════════════════════════════════════════════════════════════════
+        // BUILD & TASK MANAGEMENT
+        // ═══════════════════════════════════════════════════════════════════
+        "twxs.cmake",                   // CMake language support
+        "ms-vscode.makefile-tools"      // Makefile support
+    ]
+}

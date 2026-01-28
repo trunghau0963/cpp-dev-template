@@ -1,0 +1,485 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ═══════════════════════════════════════════════════════════════════
+    // FULL BUILD PIPELINE - Hiển thị rõ từng bước biên dịch
+    // ═══════════════════════════════════════════════════════════════════
+
+    // STEP 1: Preprocessing (.cpp → .i)
+    // Mở rộng macro, include headers, xử lý directives
+    {
+      "label": "1. Preprocess",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-E", // Chỉ chạy preprocessor
+        "-P", // Không in line markers
+        "${file}",
+        "-o",
+        "${workspaceFolder}/build/preprocessed/${fileBasenameNoExtension}.i",
+        "-I",
+        "${workspaceFolder}/include"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "detail": "Preprocessing: Mở rộng macros, includes, directives → .i file"
+    },
+
+    // STEP 2: Compilation (.i/.cpp → .s)
+    // Chuyển code thành assembly
+    {
+      "label": "2. Compile to Assembly",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-S", // Chỉ compile, output assembly
+        "-fverbose-asm", // Assembly có comments
+        "-masm=intel", // Intel syntax (dễ đọc hơn)
+        "${file}",
+        "-o",
+        "${workspaceFolder}/build/assembly/${fileBasenameNoExtension}.s",
+        "-I",
+        "${workspaceFolder}/include",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Compilation: Chuyển C++ → Assembly (.s file)"
+    },
+
+    // STEP 3: Assembly (.s → .o)
+    // Chuyển assembly thành object file (mã máy)
+    {
+      "label": "3. Assemble to Object",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-c", // Compile và assemble, không link
+        "${file}",
+        "-o",
+        "${workspaceFolder}/build/objects/${fileBasenameNoExtension}.o",
+        "-I",
+        "${workspaceFolder}/include",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-g" // Debug symbols
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Assembly: Chuyển Assembly → Object file (.o)"
+    },
+
+    // STEP 4: Linking (.o → executable)
+    // Liên kết các object files thành executable
+    {
+      "label": "4. Link",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "${workspaceFolder}/build/objects/*.o",
+        "-o",
+        "${workspaceFolder}/build/bin/${workspaceFolderBasename}",
+        "-L",
+        "${workspaceFolder}/lib",
+        "-std=c++20"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Linking: Liên kết Object files → Executable"
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    // QUICK BUILD TASKS - Build nhanh cho development
+    // ═══════════════════════════════════════════════════════════════════
+
+    // Build single file (Debug mode)
+    {
+      "label": "Build Current File (Debug)",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-g", // Debug symbols
+        "-O0", // No optimization
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Wshadow",
+        "-Wconversion", // Extra warnings
+        "-fsanitize=address,undefined", // Sanitizers
+        "-I",
+        "${workspaceFolder}/include",
+        "${file}",
+        "-o",
+        "${workspaceFolder}/build/bin/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "detail": "Build file hiện tại với debug symbols và sanitizers"
+    },
+
+    // Build single file (Release mode)
+    {
+      "label": "Build Current File (Release)",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-O3", // Maximum optimization
+        "-DNDEBUG", // Disable assertions
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-I",
+        "${workspaceFolder}/include",
+        "${file}",
+        "-o",
+        "${workspaceFolder}/build/bin/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "detail": "Build file hiện tại với optimization level 3"
+    },
+
+    // Build entire project using Makefile
+    {
+      "label": "Build Project (Make)",
+      "type": "shell",
+      "command": "make",
+      "args": ["all"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "detail": "Build toàn bộ project với Makefile"
+    },
+
+    // Build with CMake
+    {
+      "label": "Build Project (CMake)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "build/cmake", "--config", "Debug"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "group": "build",
+      "dependsOn": "CMake Configure",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Build project với CMake"
+    },
+
+    {
+      "label": "CMake Configure",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S",
+        ".",
+        "-B",
+        "build/cmake",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Configure CMake project"
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    // FULL PIPELINE - Chạy đầy đủ 4 bước với output riêng
+    // ═══════════════════════════════════════════════════════════════════
+
+    {
+      "label": "Full Build Pipeline (All Steps)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "echo '=== STEP 1: PREPROCESSING (.cpp -> .i) ===' && g++ -E -P ${file} -o build/preprocessed/${fileBasenameNoExtension}.i -I include && echo 'Preprocessed: build/preprocessed/${fileBasenameNoExtension}.i' && echo '' && echo '=== STEP 2: COMPILATION (.cpp -> .s) ===' && g++ -S -fverbose-asm -masm=intel -std=c++20 ${file} -o build/assembly/${fileBasenameNoExtension}.s -I include && echo 'Compiled: build/assembly/${fileBasenameNoExtension}.s' && echo '' && echo '=== STEP 3: ASSEMBLY (.s -> .o) ===' && g++ -c -std=c++20 -g ${file} -o build/objects/${fileBasenameNoExtension}.o -I include && echo 'Assembled: build/objects/${fileBasenameNoExtension}.o' && echo '' && echo '=== STEP 4: LINKING (.o -> executable) ===' && g++ build/objects/${fileBasenameNoExtension}.o -o build/bin/${fileBasenameNoExtension} && echo 'Linked: build/bin/${fileBasenameNoExtension}' && echo '' && echo '=== BUILD SUCCESSFUL! ==='"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "detail": "Chạy đầy đủ 4 bước biên dịch với output chi tiết"
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    // RUN & CLEAN TASKS
+    // ═══════════════════════════════════════════════════════════════════
+
+    {
+      "label": "Run",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/bin/${fileBasenameNoExtension}",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "detail": "Chạy file executable"
+    },
+
+    {
+      "label": "Build and Run",
+      "dependsOn": ["Build Current File (Debug)", "Run"],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "detail": "Build và chạy file hiện tại"
+    },
+
+    {
+      "label": "Clean Build",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "build/preprocessed/*",
+        "build/assembly/*",
+        "build/objects/*",
+        "build/bin/*"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Xóa tất cả build artifacts"
+    },
+
+    {
+      "label": "Clean and Rebuild",
+      "dependsOn": ["Clean Build", "Build Project (Make)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": [],
+      "detail": "Xóa và build lại toàn bộ project"
+    },
+
+    // ═══════════════════════════════════════════════════════════════════
+    // ANALYSIS TASKS
+    // ═══════════════════════════════════════════════════════════════════
+
+    {
+      "label": "Check Syntax Only",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-fsyntax-only",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-I",
+        "${workspaceFolder}/include",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false
+      },
+      "detail": "Chỉ kiểm tra syntax, không compile"
+    },
+
+    {
+      "label": "View Preprocessor Output",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-E",
+        "-std=c++20",
+        "-I",
+        "${workspaceFolder}/include",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "detail": "Xem output của preprocessor"
+    },
+
+    {
+      "label": "Show Symbols (nm)",
+      "type": "shell",
+      "command": "nm",
+      "args": [
+        "-C", // Demangle C++ symbols
+        "${workspaceFolder}/build/objects/${fileBasenameNoExtension}.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "detail": "Hiển thị symbols trong object file"
+    },
+
+    {
+      "label": "Disassemble (objdump)",
+      "type": "shell",
+      "command": "objdump",
+      "args": [
+        "-d", // Disassemble
+        "-C", // Demangle
+        "-M",
+        "intel", // Intel syntax
+        "${workspaceFolder}/build/bin/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "detail": "Disassemble executable để xem mã máy"
+    }
+  ]
+}

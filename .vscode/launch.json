@@ -1,0 +1,99 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Current File",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build Current File (Debug)",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "logging": {
+                "engineLogging": false
+            }
+        },
+        {
+            "name": "Debug with Arguments",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/${fileBasenameNoExtension}",
+            "args": ["${input:programArgs}"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build Current File (Debug)",
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Attach to Process",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/build/bin/${fileBasenameNoExtension}",
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Debug with Valgrind (Memory Check)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/usr/bin/valgrind",
+            "args": [
+                "--leak-check=full",
+                "--show-leak-kinds=all",
+                "--track-origins=yes",
+                "--verbose",
+                "${workspaceFolder}/build/bin/${fileBasenameNoExtension}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "preLaunchTask": "Build Current File (Debug)",
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "programArgs",
+            "type": "promptString",
+            "description": "Enter program arguments",
+            "default": ""
+        }
+    ]
+}

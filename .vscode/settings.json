@@ -1,0 +1,100 @@
+{
+  // ═══════════════════════════════════════════════════════════════════════════
+  // C/C++ Extension Settings
+  // ═══════════════════════════════════════════════════════════════════════════
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.default.cStandard": "c17",
+  "C_Cpp.default.compilerPath": "/usr/bin/g++",
+  "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/include",
+    "${workspaceFolder}/src"
+  ],
+  "C_Cpp.default.defines": ["DEBUG"],
+  "C_Cpp.errorSquiggles": "enabled",
+  "C_Cpp.autocompleteAddParentheses": true,
+  "C_Cpp.formatting": "clangFormat",
+  "C_Cpp.clang_format_style": "file",
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "C_Cpp.intelliSenseEngine": "default",
+  "C_Cpp.configurationWarnings": "enabled",
+
+  // Disable clangd to avoid conflict with Microsoft IntelliSense
+  "clangd.arguments": [],
+  "clangd.path": "",
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Editor Settings for C++
+  // ═══════════════════════════════════════════════════════════════════════════
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.rulers": [80, 120],
+  "editor.wordWrap": "off",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // File Associations
+  // ═══════════════════════════════════════════════════════════════════════════
+  "files.associations": {
+    "*.h": "cpp",
+    "*.hpp": "cpp",
+    "*.cpp": "cpp",
+    "*.cc": "cpp",
+    "*.cxx": "cpp",
+    "*.c++": "cpp",
+    "*.tpp": "cpp",
+    "*.ipp": "cpp",
+    "*.i": "cpp",
+    "*.s": "asm-intel-x86-generic"
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // File Exclusions (hide build artifacts from explorer)
+  // ═══════════════════════════════════════════════════════════════════════════
+  "files.exclude": {
+    "**/*.o": true,
+    "**/*.obj": true,
+    "**/*.exe": false,
+    "**/.git": true,
+    "**/build/cmake/**": false
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Search Exclusions
+  // ═══════════════════════════════════════════════════════════════════════════
+  "search.exclude": {
+    "**/build": true,
+    "**/node_modules": true,
+    "**/*.o": true,
+    "**/*.i": true,
+    "**/*.s": true
+  },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Terminal Settings
+  // ═══════════════════════════════════════════════════════════════════════════
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.scrollback": 10000,
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Code Runner Settings (if extension installed)
+  // ═══════════════════════════════════════════════════════════════════════════
+  "code-runner.executorMap": {
+    "cpp": "cd $dir && g++ -std=c++20 -g -Wall -Wextra -I${workspaceFolder}/include $fileName -o ${workspaceFolder}/build/bin/$fileNameWithoutExt && ${workspaceFolder}/build/bin/$fileNameWithoutExt",
+    "c": "cd $dir && gcc -std=c17 -g -Wall -Wextra $fileName -o ${workspaceFolder}/build/bin/$fileNameWithoutExt && ${workspaceFolder}/build/bin/$fileNameWithoutExt"
+  },
+  "code-runner.runInTerminal": true,
+  "code-runner.saveFileBeforeRun": true,
+  "code-runner.clearPreviousOutput": true,
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CMake Settings (if CMake Tools extension installed)
+  // ═══════════════════════════════════════════════════════════════════════════
+  "cmake.buildDirectory": "${workspaceFolder}/build/cmake",
+  "cmake.configureOnOpen": false,
+  "cmake.generator": "Unix Makefiles"
+}

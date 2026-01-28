@@ -1,0 +1,184 @@
+# .gitignore cho C++ Project
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Build Outputs
+# ═══════════════════════════════════════════════════════════════════════════════
+build/
+out/
+bin/
+lib/
+
+# Object files
+*.o
+*.obj
+*.ko
+
+# Preprocessed files
+*.i
+*.ii
+
+# Assembly files
+*.s
+*.asm
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
+*.x86_64
+*.hex
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Dependency files
+# ═══════════════════════════════════════════════════════════════════════════════
+*.d
+*.dep
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Debug files
+# ═══════════════════════════════════════════════════════════════════════════════
+*.dSYM/
+*.su
+*.idb
+*.pdb
+*.ilk
+*.exp
+
+# Valgrind
+vgcore.*
+*.valgrind
+
+# Core dumps
+core
+core.*
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# IDE và Editor
+# ═══════════════════════════════════════════════════════════════════════════════
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/c_cpp_properties.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.*
+*.sln
+*.suo
+*.user
+*.sdf
+*.opensdf
+*.opendb
+ipch/
+
+# CLion / IntelliJ
+.idea/
+cmake-build-*/
+*.iml
+
+# Eclipse
+.project
+.cproject
+.settings/
+
+# Qt Creator
+*.pro.user*
+*.qbs.user*
+*.moc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+Makefile.Debug
+Makefile.Release
+
+# Xcode
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CMake
+# ═══════════════════════════════════════════════════════════════════════════════
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+compile_commands.json
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Package Managers
+# ═══════════════════════════════════════════════════════════════════════════════
+# Conan
+conan/
+conanbuildinfo.*
+conaninfo.txt
+graph_info.json
+
+# vcpkg
+vcpkg_installed/
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Testing
+# ═══════════════════════════════════════════════════════════════════════════════
+Testing/
+CTestCostData.txt
+
+# Coverage
+*.gcov
+*.gcda
+*.gcno
+coverage/
+coverage.xml
+*.lcov
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Documentation
+# ═══════════════════════════════════════════════════════════════════════════════
+docs/html/
+docs/latex/
+docs/xml/
+doxygen_output/
+Doxyfile.bak
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# System Files
+# ═══════════════════════════════════════════════════════════════════════════════
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*~
+*.swp
+*.swo
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Log files
+*.log
+logs/
